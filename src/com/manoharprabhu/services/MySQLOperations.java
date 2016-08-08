@@ -25,11 +25,14 @@ package com.manoharprabhu.services;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,7 +87,7 @@ public class MySQLOperations implements DatabaseOperations {
             }
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DatabaseService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MySQLOperations.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return result;
@@ -127,6 +130,46 @@ public class MySQLOperations implements DatabaseOperations {
     @Override
     public void setDatabaseName(String database) {
         this.database = database;
+    }
+
+    @Override
+    public List<String> getTablesList() {
+        List<String> tablesList = new ArrayList<String>();
+        try {
+            Connection connection = this.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("SHOW TABLES;");
+            while (result.next()) {
+                tablesList.add(result.getString(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MySQLOperations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tablesList;
+    }
+
+    @Override
+    public List<Map<String, String>> getColumnNamesAndAttributes(String table) {
+        List<Map<String, String>> tableColumns = new ArrayList<Map<String, String>>();
+        try {
+            Connection connection = this.getConnection();
+            PreparedStatement statement = connection.prepareStatement("select column_name, column_type from information_schema.columns where table_schema = ? and table_name = ?;");
+            System.out.println(table);
+            System.out.println(database);
+            statement.setString(1, database);
+            statement.setString(2, table);
+            ResultSet result = statement.executeQuery();
+            while (result.next()) {
+                Map<String, String> columnMap = new HashMap<String, String>();
+                columnMap.put("column_name", result.getString(1));
+                columnMap.put("column_type", result.getString(2));
+                tableColumns.add(columnMap);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MySQLOperations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return tableColumns;
     }
 
 }

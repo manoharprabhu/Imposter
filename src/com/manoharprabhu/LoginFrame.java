@@ -217,13 +217,14 @@ public class LoginFrame extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        if(database.getText().isEmpty())  {
+        if (database.getText().isEmpty()) {
             JOptionPane.showMessageDialog(LoginFrame.this, "Use the 'Browse' button and select a database.");
             return;
-        }       
+        }
         DatabaseService databaseService = new DatabaseService(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()));
         databaseService.setDatabase(database.getText());
         connectProgress.setIndeterminate(true);
@@ -364,14 +365,23 @@ public class LoginFrame extends javax.swing.JFrame {
         @Override
         public void run() {
             final boolean status = databaseService.testConnection();
-            connectProgress.setIndeterminate(false);
-            connectProgress.setEnabled(false);
-            if (status) {
-                DataStore.storeDatabaseOperationsInstance(databaseService.getDatabaseOperationsInstance());
-                // Move on to the next page
-            } else {
-                JOptionPane.showMessageDialog(LoginFrame.this, "Unable to connect to the database");
-            }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectProgress.setIndeterminate(false);
+                    connectProgress.setEnabled(false);
+                    if (status) {
+                        databaseService.setDatabase(database.getText());
+                        DataStore.storeDatabaseServiceInstance(databaseService);
+                        SelectTableFrame selectTableFrame = new SelectTableFrame();
+                        LoginFrame.this.setVisible(false);
+                        LoginFrame.this.dispose();
+                        selectTableFrame.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(LoginFrame.this, "Unable to connect to the database");
+                    }
+                }
+            });
         }
 
     }

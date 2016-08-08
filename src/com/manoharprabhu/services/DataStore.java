@@ -28,15 +28,15 @@ package com.manoharprabhu.services;
  * @author mprabhu
  */
 public class DataStore {
-    private static DatabaseOperations databaseOperationsInstance = null;
-
-    public static void storeDatabaseOperationsInstance(DatabaseOperations instance) {
-        if (instance == null) {
-            databaseOperationsInstance = instance;
+    private static DatabaseService databaseService = null;
+    
+    public static void storeDatabaseServiceInstance(DatabaseService instance) {
+        if (databaseService == null) {
+            databaseService = instance;
         }
     }
     
-    public static DatabaseOperations getDatabaseOperationsInstance() {
-        return databaseOperationsInstance;
+    public static DatabaseService getDatabaseServiceInstance() {
+        return databaseService;
     }
 }

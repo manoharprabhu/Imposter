@@ -25,6 +25,8 @@ package com.manoharprabhu.services;
 
 import java.sql.Connection;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -52,7 +54,12 @@ public class DatabaseService {
         databaseOperations.setDatabaseName(database);
     }
     
-    public DatabaseOperations getDatabaseOperationsInstance() {
-        return databaseOperations;
+    public List<String> getTablesList() {
+        return databaseOperations.getTablesList();
     }
+        
+    public List<Map<String, String>> getColumnNamesAndAttributes(String table) {
+        return databaseOperations.getColumnNamesAndAttributes(table);
+    }
+    
 }
