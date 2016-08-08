@@ -23,10 +23,10 @@
  */
 package com.manoharprabhu;
 
+import com.manoharprabhu.services.DataStore;
 import com.manoharprabhu.services.DatabaseService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -66,6 +66,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         database = new javax.swing.JTextField();
         browseDatabase = new javax.swing.JButton();
+        connectProgress = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,6 +129,8 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
+        connectProgress.setEnabled(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -135,26 +138,29 @@ public class LoginFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(connectButton, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(testConnectionButton, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
-                    .addComponent(databaseType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(hostname)
-                    .addComponent(username)
-                    .addComponent(password)
-                    .addComponent(port)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(database)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(browseDatabase)))
-                .addContainerGap(40, Short.MAX_VALUE))
+                    .addComponent(connectProgress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(databaseType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(hostname)
+                            .addComponent(username)
+                            .addComponent(password)
+                            .addComponent(port, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(database)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(browseDatabase))))
+                    .addComponent(testConnectionButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(connectButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +194,9 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addComponent(testConnectionButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(connectButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(connectProgress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,50 +212,46 @@ public class LoginFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-        if (DatabaseService.testConnection(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()), database.getText())) {
-            DatabaseService.storeCredentials(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()), database.getText());
-            // Move on to the next page
-        } else {
-            JOptionPane.showMessageDialog(this, "Unable to connect to the database");
-        }
+        if(database.getText().isEmpty())  {
+            JOptionPane.showMessageDialog(LoginFrame.this, "Use the 'Browse' button and select a database.");
+            return;
+        }       
+        DatabaseService databaseService = new DatabaseService(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()));
+        databaseService.setDatabase(database.getText());
+        connectProgress.setIndeterminate(true);
+        connectProgress.setEnabled(true);
+        Thread connectThread = new Thread(new ConnectButtonThread(databaseService));
+        connectThread.start();
     }//GEN-LAST:event_connectButtonActionPerformed
 
     private void testConnectionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testConnectionButtonActionPerformed
-        if (DatabaseService.testConnection(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()), database.getText())) {
-            JOptionPane.showMessageDialog(this, "Connection Successful");
-        } else {
-            JOptionPane.showMessageDialog(this, "Unable to connect to the database");
-        }
+        final DatabaseService databaseService = new DatabaseService(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()));
+        Thread testConnectThread = new Thread(new TestConnectThread(databaseService));
+        connectProgress.setIndeterminate(true);
+        connectProgress.setEnabled(true);
+        testConnectThread.start();
     }//GEN-LAST:event_testConnectionButtonActionPerformed
 
     private void browseDatabaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseDatabaseActionPerformed
-        if (DatabaseService.testConnection(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()), database.getText())) {
-            BrowseDatabaseDialog browseDatabaseDialog = new BrowseDatabaseDialog(this, true);
-            browseDatabaseDialog.setDatabaseType(databaseType.getSelectedIndex());
-            browseDatabaseDialog.setHostname(hostname.getText());
-            browseDatabaseDialog.setUsername(username.getText());
-            browseDatabaseDialog.setPassword(String.valueOf(password.getPassword()));
-            browseDatabaseDialog.setPort(Integer.valueOf((int) port.getValue()));
-            browseDatabaseDialog.populateDatabaseCombo();
-            browseDatabaseDialog.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Unable to connect to the database");
-        }
-
+        final DatabaseService databaseService = new DatabaseService(databaseType.getSelectedIndex(), hostname.getText(), username.getText(), String.valueOf(password.getPassword()), Integer.valueOf((int) port.getValue()));
+        Thread browserDatabaseThread = new Thread(new BrowseDatabaseThread(databaseService));
+        connectProgress.setIndeterminate(true);
+        connectProgress.setEnabled(true);
+        browserDatabaseThread.start();
     }//GEN-LAST:event_browseDatabaseActionPerformed
 
     public void setDatabaseName(String text) {
         database.setText(text);
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -277,6 +281,7 @@ public class LoginFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton browseDatabase;
     private javax.swing.JButton connectButton;
+    private javax.swing.JProgressBar connectProgress;
     private javax.swing.JTextField database;
     private javax.swing.JComboBox databaseType;
     private javax.swing.JTextField hostname;
@@ -292,4 +297,82 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JButton testConnectionButton;
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
+
+    class TestConnectThread implements Runnable {
+
+        private DatabaseService databaseService;
+
+        public TestConnectThread(DatabaseService databaseService) {
+            this.databaseService = databaseService;
+        }
+
+        @Override
+        public void run() {
+            final boolean status = databaseService.testConnection();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectProgress.setIndeterminate(false);
+                    connectProgress.setEnabled(false);
+                    if (status) {
+                        JOptionPane.showMessageDialog(LoginFrame.this, "Connection Successful");
+                    } else {
+                        JOptionPane.showMessageDialog(LoginFrame.this, "Unable to connect to the database");
+                    }
+                }
+            });
+        }
+    }
+
+    class BrowseDatabaseThread implements Runnable {
+
+        final DatabaseService databaseService;
+
+        public BrowseDatabaseThread(DatabaseService databaseService) {
+            this.databaseService = databaseService;
+        }
+
+        @Override
+        public void run() {
+            final boolean status = databaseService.testConnection();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    connectProgress.setIndeterminate(false);
+                    connectProgress.setEnabled(false);
+                    if (status) {
+                        BrowseDatabaseDialog browseDatabaseDialog = new BrowseDatabaseDialog(LoginFrame.this, true);
+                        browseDatabaseDialog.setDatabaseService(databaseService);
+                        browseDatabaseDialog.populateDatabaseCombo();
+                        browseDatabaseDialog.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(LoginFrame.this, "Unable to connect to the database");
+                    }
+                }
+            });
+        }
+    }
+
+    class ConnectButtonThread implements Runnable {
+
+        final DatabaseService databaseService;
+
+        public ConnectButtonThread(DatabaseService databaseService) {
+            this.databaseService = databaseService;
+        }
+
+        @Override
+        public void run() {
+            final boolean status = databaseService.testConnection();
+            connectProgress.setIndeterminate(false);
+            connectProgress.setEnabled(false);
+            if (status) {
+                DataStore.storeDatabaseOperationsInstance(databaseService.getDatabaseOperationsInstance());
+                // Move on to the next page
+            } else {
+                JOptionPane.showMessageDialog(LoginFrame.this, "Unable to connect to the database");
+            }
+        }
+
+    }
 }

@@ -23,20 +23,15 @@
  */
 package com.manoharprabhu.services;
 
+import java.sql.Connection;
+import java.util.List;
+
 /**
  *
  * @author mprabhu
  */
-public class DataStore {
-    private static DatabaseOperations databaseOperationsInstance = null;
-
-    public static void storeDatabaseOperationsInstance(DatabaseOperations instance) {
-        if (instance == null) {
-            databaseOperationsInstance = instance;
-        }
-    }
-    
-    public static DatabaseOperations getDatabaseOperationsInstance() {
-        return databaseOperationsInstance;
-    }
+public interface DatabaseOperations {
+    public boolean testConnection();
+    public List<String> getDatabaseList();    
+    public void setDatabaseName(String database);
 }

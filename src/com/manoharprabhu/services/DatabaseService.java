@@ -24,14 +24,7 @@
 package com.manoharprabhu.services;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -39,67 +32,27 @@ import java.util.logging.Logger;
  */
 public class DatabaseService {
 
-    public static boolean testConnection(int type, String hostname, String username, String password, int port, String database) {
-        if (!loadDatabaseDriver(type)) {
-            return false;
+    DatabaseOperations databaseOperations = null;
+
+    public DatabaseService(int type, String hostname, String username, String password, int port) {
+        if (type == 0) {
+            databaseOperations = new MySQLOperations(hostname, username, password, port);
         }
-        Connection connection = getConnection(type, hostname, username, password, port, database);
-        if (connection == null) {
-            return false;
-        }
-        try {
-            connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseService.class.getName()).log(Level.SEVERE, "Error while closing connection", ex);
-        }
-        Logger.getLogger(DatabaseService.class.getName()).log(Level.INFO, "Connected successfully");
-        return true;
     }
 
-    public static void storeCredentials(int type, String hostname, String username, String password, int port, String database) {
-        Connection connection = getConnection(type, hostname, username, password, port, database);
-        DataStore.storeCredentials(connection, type, hostname, username, password, port, database);
+    public boolean testConnection() {
+        return databaseOperations.testConnection();
+    }
+
+    public List<String> getDatabaseList() {
+        return databaseOperations.getDatabaseList();
     }
     
-    public static List<String> getDatabaseList(int type, String hostname, String username, String password, int port) {
-        List<String> result = new ArrayList<String>();
-        if(type == 0) {
-            try {
-                Connection connection = getConnection(type, hostname, username, password, port, "");
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SHOW DATABASES;");
-                while(resultSet.next()) {
-                    result.add(resultSet.getString(1));
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        System.out.println(result);
-        return result;
+    public void setDatabase(String database) {
+        databaseOperations.setDatabaseName(database);
     }
-
-    private static boolean loadDatabaseDriver(int type) {
-        try {
-            if (type == 0) {
-                Class.forName("com.mysql.jdbc.Driver");
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DatabaseService.class.getName()).log(Level.SEVERE, "Unable to load the DB driver", ex);
-            return false;
-        }
-        return true;
-    }
-
-    private static Connection getConnection(int type, String hostname, String username, String password, int port, String database) {
-        Connection connection = null;
-        if (type == 0) {
-            try {
-                connection = DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseService.class.getName()).log(Level.SEVERE, "Unable to connect using the given credentials", ex);
-            }
-        }
-        return connection;
+    
+    public DatabaseOperations getDatabaseOperationsInstance() {
+        return databaseOperations;
     }
 }

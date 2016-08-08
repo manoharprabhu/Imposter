@@ -24,11 +24,8 @@
 package com.manoharprabhu;
 
 import com.manoharprabhu.services.DatabaseService;
-import java.awt.Frame;
 import java.util.List;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JPanel;
 
 /**
  *
@@ -47,12 +44,6 @@ public class BrowseDatabaseDialog extends javax.swing.JDialog {
         initComponents();
     }
     
-    private int databaseType;
-    private String hostname;
-    private String username;
-    private String password;
-    private int port;
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -100,6 +91,8 @@ public class BrowseDatabaseDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private DatabaseService databaseService = null;
+    
     private void selectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectButtonActionPerformed
         loginFrame.setDatabaseName((String)databaseList.getSelectedItem());
         this.setVisible(false);
@@ -149,7 +142,7 @@ public class BrowseDatabaseDialog extends javax.swing.JDialog {
     }
     
     public void populateDatabaseCombo() {
-        List<String> databases = DatabaseService.getDatabaseList(getDatabaseType(), getHostname(), getUsername(), getPassword(), getPort());
+        List<String> databases = databaseService.getDatabaseList();
         databaseList.setModel(new DefaultComboBoxModel(databases.toArray()));
     }
 
@@ -159,72 +152,10 @@ public class BrowseDatabaseDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * @return the databaseType
+     * @param databaseService the databaseService to set
      */
-    public int getDatabaseType() {
-        return databaseType;
+    public void setDatabaseService(DatabaseService databaseService) {
+        this.databaseService = databaseService;
     }
 
-    /**
-     * @param databaseType the databaseType to set
-     */
-    public void setDatabaseType(int databaseType) {
-        this.databaseType = databaseType;
-    }
-
-    /**
-     * @return the hostname
-     */
-    public String getHostname() {
-        return hostname;
-    }
-
-    /**
-     * @param hostname the hostname to set
-     */
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    /**
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * @return the port
-     */
-    public int getPort() {
-        return port;
-    }
-
-    /**
-     * @param port the port to set
-     */
-    public void setPort(int port) {
-        this.port = port;
-    }
 }
