@@ -24,7 +24,7 @@
 package com.manoharprabhu;
 
 import com.manoharprabhu.services.DataStore;
-import com.manoharprabhu.services.DatabaseOperations;
+import com.manoharprabhu.services.IDatabaseOperations;
 import com.manoharprabhu.services.DatabaseService;
 import java.util.List;
 import java.util.Map;

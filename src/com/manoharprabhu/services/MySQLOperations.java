@@ -40,7 +40,7 @@ import java.util.logging.Logger;
  *
  * @author mprabhu
  */
-public class MySQLOperations implements DatabaseOperations {
+public class MySQLOperations implements IDatabaseOperations {
 
     private int type = 0;
     private String hostname;

@@ -23,6 +23,9 @@
  */
 package com.manoharprabhu.services;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  *
  * @author mprabhu
@@ -31,6 +34,7 @@ public class DataStore {
 
     private static DatabaseService databaseService = null;
     private static String selectedTable = null;
+    private static List<Map<String, String>> columnNameTypeList = null;
 
     public static void storeDatabaseServiceInstance(DatabaseService instance) {
         if (databaseService == null) {

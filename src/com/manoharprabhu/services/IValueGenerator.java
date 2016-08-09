@@ -23,24 +23,10 @@
  */
 package com.manoharprabhu.services;
 
-import java.sql.Connection;
-import java.util.List;
-import java.util.Map;
-
 /**
  *
  * @author mprabhu
  */
-public interface DatabaseOperations {
-
-    public boolean testConnection();
-
-    public List<String> getDatabaseList();
-
-    public void setDatabaseName(String database);
-
-    public List<String> getTablesList();
-
-    public List<Map<String, String>> getColumnNamesAndAttributes(String table);
-
+public interface IValueGenerator {
+    public Object getNextValue();
 }

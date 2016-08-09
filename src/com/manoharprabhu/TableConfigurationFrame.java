@@ -41,36 +41,27 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
      * Creates new form TableConfigurationFrame
      */
     private String selectedTable = "";
-    
+
     public TableConfigurationFrame() {
         initComponents();
         populateConfigureColumn();
     }
-    
+
     private void populateConfigureColumn() {
         final TableConfigurationFrame self = this;
-        Thread configureColumnThread = new Thread(new Runnable() {
-            
-            @Override
-            public void run() {
-                DatabaseService databaseService = DataStore.getDatabaseServiceInstance();
-                final List<Map<String, String>> tableList = databaseService.getColumnNamesAndAttributes(self.selectedTable);
-                final List<String> comboData = new ArrayList<String>();
-                for (int i = 0; i < tableList.size(); i++) {
-                    comboData.add(tableList.get(i).get("column_name"));
-                }
-                SwingUtilities.invokeLater(new Runnable() {
-                    
-                    @Override
-                    public void run() {
-                        configuredColumnsCombo.setModel(new DefaultComboBoxModel(comboData.toArray()));
-                    }
-                });
-            }
-        });
-        configureColumnThread.start();
+        (new Thread(() -> {
+            DatabaseService databaseService = DataStore.getDatabaseServiceInstance();
+            final List<Map<String, String>> tableList = databaseService.getColumnNamesAndAttributes(self.selectedTable);
+            final List<String> comboData = new ArrayList<>();
+            tableList.stream().forEach((item) -> {
+                comboData.add(item.get("column_name"));
+            });
+            SwingUtilities.invokeLater(() -> {
+                configuredColumnsCombo.setModel(new DefaultComboBoxModel(comboData.toArray()));
+            });
+        })).start();
     }
-    
+
     public void setTableSelected(String table) {
         this.selectedTable = table;
         this.tableSelected.setText(table);

@@ -26,40 +26,21 @@ package com.manoharprabhu.services;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
  * @author mprabhu
  */
-public class DatabaseService {
+public interface IDatabaseOperations {
 
-    IDatabaseOperations databaseOperations = null;
+    public boolean testConnection();
 
-    public DatabaseService(int type, String hostname, String username, String password, int port) {
-        if (type == 0) {
-            databaseOperations = new MySQLOperations(hostname, username, password, port);
-        }
-    }
+    public List<String> getDatabaseList();
 
-    public boolean testConnection() {
-        return databaseOperations.testConnection();
-    }
+    public void setDatabaseName(String database);
 
-    public List<String> getDatabaseList() {
-        return databaseOperations.getDatabaseList();
-    }
-    
-    public void setDatabase(String database) {
-        databaseOperations.setDatabaseName(database);
-    }
-    
-    public List<String> getTablesList() {
-        return databaseOperations.getTablesList();
-    }
-        
-    public List<Map<String, String>> getColumnNamesAndAttributes(String table) {
-        return databaseOperations.getColumnNamesAndAttributes(table);
-    }
-    
+    public List<String> getTablesList();
+
+    public List<Map<String, String>> getColumnNamesAndAttributes(String table);
+
 }
