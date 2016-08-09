@@ -42,5 +42,7 @@ public interface IDatabaseOperations {
     public List<String> getTablesList();
 
     public List<Map<String, String>> getColumnNamesAndAttributes(String table);
+    
+    public String getTypeOfColumn(String columnTypeString); 
 
 }

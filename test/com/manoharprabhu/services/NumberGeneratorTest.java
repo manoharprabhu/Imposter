@@ -108,4 +108,17 @@ public class NumberGeneratorTest {
         assertEquals(7L, generator.getNextValue());
     }
 
+    @Test
+    public void testGetNextValueRandom() {
+        NumberGenerator numberGenerator = new NumberGenerator();
+        numberGenerator.setIsNextRandom(true);
+        numberGenerator.setMaximumValue(10);
+        numberGenerator.setMinimumValue(1);
+        IValueGenerator generator = (IValueGenerator) numberGenerator;
+        for (int i = 0; i < 100; i++) {
+            assertTrue((long) generator.getNextValue() >= 1);
+            assertTrue((long) generator.getNextValue() <= 10);
+        }
+    }
+
 }

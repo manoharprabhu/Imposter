@@ -62,4 +62,8 @@ public class DatabaseService {
         return databaseOperations.getColumnNamesAndAttributes(table);
     }
     
+    public String getTypeOfColumn(String columnTypeString) {
+        return databaseOperations.getTypeOfColumn(columnTypeString);
+    }
+    
 }

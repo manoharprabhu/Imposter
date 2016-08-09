@@ -51,4 +51,29 @@ public class DataStore {
             selectedTable = table;
         }
     }
+
+    /**
+     * @return the columnNameTypeList
+     */
+    public static List<Map<String, String>> getColumnNameTypeList() {
+        return columnNameTypeList;
+    }
+
+    /**
+     * @param aColumnNameTypeList the columnNameTypeList to set
+     */
+    public static void setColumnNameTypeList(List<Map<String, String>> aColumnNameTypeList) {
+        if (columnNameTypeList == null) {
+            columnNameTypeList = aColumnNameTypeList;
+        }
+    }
+
+    public static String getTypeOfColumn(String column) {
+        for (Map<String, String> item : columnNameTypeList) {
+            if (column.equals(item.get("column_name"))) {
+                return item.get("column_type");
+            }
+        }
+        return null;
+    }
 }

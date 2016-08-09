@@ -170,4 +170,24 @@ public class MySQLOperations implements IDatabaseOperations {
         return tableColumns;
     }
 
+    @Override
+    public String getTypeOfColumn(String columnTypeString) {
+        columnTypeString = columnTypeString.trim().toLowerCase();
+        if (columnTypeString.startsWith("bit")
+                || columnTypeString.startsWith("tinyint")
+                || columnTypeString.startsWith("smallint")
+                || columnTypeString.startsWith("mediumint")
+                || columnTypeString.startsWith("int")
+                || columnTypeString.startsWith("bigint")
+                || columnTypeString.startsWith("dec")
+                || columnTypeString.startsWith("numeric")
+                || columnTypeString.startsWith("fixed")
+                || columnTypeString.startsWith("float")
+                || columnTypeString.startsWith("double")
+                || columnTypeString.startsWith("real")
+                || columnTypeString.startsWith("bool")) {
+            return "number";
+        }
+        return "else";
+    }
 }
