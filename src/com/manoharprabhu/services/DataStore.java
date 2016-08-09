@@ -28,15 +28,23 @@ package com.manoharprabhu.services;
  * @author mprabhu
  */
 public class DataStore {
+
     private static DatabaseService databaseService = null;
-    
+    private static String selectedTable = null;
+
     public static void storeDatabaseServiceInstance(DatabaseService instance) {
         if (databaseService == null) {
             databaseService = instance;
         }
     }
-    
+
     public static DatabaseService getDatabaseServiceInstance() {
         return databaseService;
+    }
+
+    public static void setSelectedTable(String table) {
+        if (selectedTable == null) {
+            selectedTable = table;
+        }
     }
 }

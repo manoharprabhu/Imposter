@@ -154,8 +154,6 @@ public class MySQLOperations implements DatabaseOperations {
         try {
             Connection connection = this.getConnection();
             PreparedStatement statement = connection.prepareStatement("select column_name, column_type from information_schema.columns where table_schema = ? and table_name = ?;");
-            System.out.println(table);
-            System.out.println(database);
             statement.setString(1, database);
             statement.setString(2, table);
             ResultSet result = statement.executeQuery();
