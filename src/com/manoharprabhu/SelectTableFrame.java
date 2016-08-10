@@ -24,12 +24,10 @@
 package com.manoharprabhu;
 
 import com.manoharprabhu.services.DataStore;
-import com.manoharprabhu.services.IDatabaseOperations;
 import com.manoharprabhu.services.DatabaseService;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;

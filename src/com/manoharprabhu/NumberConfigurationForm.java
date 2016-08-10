@@ -23,6 +23,11 @@
  */
 package com.manoharprabhu;
 
+import com.manoharprabhu.services.DataStore;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
+
 /**
  *
  * @author mprabhu
@@ -32,8 +37,50 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
     /**
      * Creates new form NumberConfigurationForm
      */
+    private String columnToBeConfigured = null;
+    Long val = Long.MAX_VALUE;
+    Long min = Long.MIN_VALUE;
+    Long max = Long.MAX_VALUE;
+    Long step = 1L;
+
     public NumberConfigurationForm() {
         initComponents();
+    }
+
+    public NumberConfigurationForm(String column) {
+        this.columnToBeConfigured = column;
+        initComponents();
+        loadSavedValuesIfPresent();
+    }
+
+    public final void loadSavedValuesIfPresent() {
+        Map<String, String> columnMap = DataStore.getMapForColumn(columnToBeConfigured);
+        if (columnMap.get("isRandomNumber") != null) {
+            if ("0".equals(columnMap.get("isRandomNumber"))) {
+                isRandomCheckbox.setSelected(false);
+            } else {
+                isRandomCheckbox.setSelected(true);
+            }
+        } else {
+            isRandomCheckbox.setSelected(false);
+        }
+        if (columnMap.get("minimumValue") != null) {
+            minimumValueSpinner.setValue(Long.valueOf(columnMap.get("minimumValue")));
+        } else {
+            minimumValueSpinner.setValue(0L);
+        }
+
+        if (columnMap.get("maximumValue") != null) {
+            maximumValueSpinner.setValue(Long.valueOf(columnMap.get("maximumValue")));
+        } else {
+            maximumValueSpinner.setValue(100L);
+        }
+
+        if (columnMap.get("startingValue") != null) {
+            startingValueSpinner.setValue(Long.valueOf(columnMap.get("startingValue")));
+        } else {
+            startingValueSpinner.setValue(20L);
+        }
     }
 
     /**
@@ -49,11 +96,11 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         isRandomCheckbox = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        minimumValueSpinner = new javax.swing.JSpinner();
+        minimumValueSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(val, min, max, step));
         jLabel2 = new javax.swing.JLabel();
-        maximumValueSpinner = new javax.swing.JSpinner();
+        maximumValueSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(val, min, max, step));
         jLabel3 = new javax.swing.JLabel();
-        startingValueSpinner = new javax.swing.JSpinner();
+        startingValueSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(val, min, max, step));
         saveButton = new javax.swing.JButton();
 
         jToggleButton1.setText("jToggleButton1");
@@ -61,6 +108,11 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         isRandomCheckbox.setText("Random number?");
+        isRandomCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                isRandomCheckboxActionPerformed(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -103,6 +155,11 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         jLabel3.setText("Starting value:");
 
         saveButton.setText("Save");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -141,6 +198,45 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        String validationMessage = performValidation();
+        if (validationMessage != null) {
+            JOptionPane.showMessageDialog(this, validationMessage);
+            return;
+        }
+        Map<String, String> columnMap = DataStore.getMapForColumn(columnToBeConfigured);
+        columnMap.put("isRandomNumber", (isRandomCheckbox.isSelected() == true) ? "1" : "0");
+        columnMap.put("minimumValue", String.valueOf(minimumValueSpinner.getValue()));
+        columnMap.put("maximumValue", String.valueOf(maximumValueSpinner.getValue()));
+        columnMap.put("startingValue", String.valueOf(startingValueSpinner.getValue()));
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void isRandomCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_isRandomCheckboxActionPerformed
+        if (isRandomCheckbox.isSelected()) {
+            startingValueSpinner.setEnabled(false);
+        } else {
+            startingValueSpinner.setEnabled(true);
+        }
+    }//GEN-LAST:event_isRandomCheckboxActionPerformed
+
+    public String performValidation() {
+        Long minimumValue = (Long) minimumValueSpinner.getValue();
+        Long maximumValue = (Long) maximumValueSpinner.getValue();
+        Long startValue = (Long) startingValueSpinner.getValue();
+        boolean isRandomValue = isRandomCheckbox.isSelected();
+        if (maximumValue < minimumValue) {
+            return "Please set the maximum value greater than or equal to the minimum value.";
+        }
+
+        if (!isRandomValue && (startValue > maximumValue || startValue < minimumValue)) {
+            return "Please set the start value within the maximum and minimum value range.";
+        }
+
+        return null;
+    }
 
     /**
      * @param args the command line arguments
@@ -189,4 +285,5 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
     private javax.swing.JButton saveButton;
     private javax.swing.JSpinner startingValueSpinner;
     // End of variables declaration//GEN-END:variables
+
 }

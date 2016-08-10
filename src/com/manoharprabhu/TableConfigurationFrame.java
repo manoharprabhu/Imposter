@@ -133,8 +133,8 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
         String selectedColumn = (String) configuredColumnsCombo.getSelectedItem();
         String columnType = DataStore.getTypeOfColumn(selectedColumn);
         DatabaseService databaseService = DataStore.getDatabaseServiceInstance();
-        if("number".equals(databaseService.getTypeOfColumn(columnType))) {
-            NumberConfigurationForm numberConfigurationForm = new NumberConfigurationForm();
+        if ("number".equals(databaseService.getTypeOfColumn(columnType))) {
+            NumberConfigurationForm numberConfigurationForm = new NumberConfigurationForm(selectedColumn);
             numberConfigurationForm.setVisible(true);
         }
     }//GEN-LAST:event_configureButtonActionPerformed

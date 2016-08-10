@@ -76,4 +76,13 @@ public class DataStore {
         }
         return null;
     }
+
+    public static Map<String, String> getMapForColumn(String column) {
+        for (Map<String, String> item : columnNameTypeList) {
+            if (column.equals(item.get("column_name"))) {
+                return item;
+            }
+        }
+        return null;
+    }
 }
