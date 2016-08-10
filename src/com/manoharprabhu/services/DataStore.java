@@ -47,7 +47,7 @@ public class DataStore {
     }
 
     public static void setSelectedTable(String table) {
-        if (selectedTable == null) {
+        if (getSelectedTable() == null) {
             selectedTable = table;
         }
     }
@@ -78,11 +78,18 @@ public class DataStore {
     }
 
     public static Map<String, String> getMapForColumn(String column) {
-        for (Map<String, String> item : columnNameTypeList) {
-            if (column.equals(item.get("column_name"))) {
-                return item;
+        for(int i = 0; i < columnNameTypeList.size() ; i++) {
+            if (column.equals(columnNameTypeList.get(i).get("column_name"))) {
+                return columnNameTypeList.get(i);
             }
         }
         return null;
+    }
+
+    /**
+     * @return the selectedTable
+     */
+    public static String getSelectedTable() {
+        return selectedTable;
     }
 }

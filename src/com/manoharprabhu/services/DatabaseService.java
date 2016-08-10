@@ -23,10 +23,9 @@
  */
 package com.manoharprabhu.services;
 
-import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -64,6 +63,14 @@ public class DatabaseService {
     
     public String getTypeOfColumn(String columnTypeString) {
         return databaseOperations.getTypeOfColumn(columnTypeString);
+    }
+    
+    public String getInsertSQL() {
+        return databaseOperations.getInsertSQL();
+    }
+    
+    public PreparedStatement getPreparedStatementForInsertQuery() {
+        return databaseOperations.getPreparedStatementForInsertQuery();
     }
     
 }

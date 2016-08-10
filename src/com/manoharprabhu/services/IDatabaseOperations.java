@@ -24,6 +24,7 @@
 package com.manoharprabhu.services;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +44,10 @@ public interface IDatabaseOperations {
 
     public List<Map<String, String>> getColumnNamesAndAttributes(String table);
     
-    public String getTypeOfColumn(String columnTypeString); 
+    public String getTypeOfColumn(String columnTypeString);
+    
+    public String getInsertSQL();
+    
+    public PreparedStatement getPreparedStatementForInsertQuery();
 
 }

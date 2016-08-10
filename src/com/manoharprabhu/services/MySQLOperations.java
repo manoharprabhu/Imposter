@@ -190,4 +190,40 @@ public class MySQLOperations implements IDatabaseOperations {
         }
         return "else";
     }
+
+    @Override
+    public String getInsertSQL() {
+        List<Map<String, String>> columnNameAttributes = DataStore.getColumnNameTypeList();
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("INSERT INTO ")
+                .append(DataStore.getSelectedTable())
+                .append("( ");
+        for (int i = 0; i < columnNameAttributes.size(); i++) {
+            stringBuffer.append(columnNameAttributes.get(i).get("column_name"));
+            if (i != columnNameAttributes.size() - 1) {
+                stringBuffer.append(", ");
+            }
+        }
+        stringBuffer.append(" ) VALUES ( ");
+        for (int i = 0; i < columnNameAttributes.size(); i++) {
+            stringBuffer.append("?");
+            if (i != columnNameAttributes.size() - 1) {
+                stringBuffer.append(", ");
+            }
+        }
+        stringBuffer.append(" );");
+        return stringBuffer.toString();
+    }
+
+    @Override
+    public PreparedStatement getPreparedStatementForInsertQuery() {
+        try {
+            String query = this.getInsertSQL();
+            PreparedStatement statement = this.getConnection().prepareStatement(query);
+            return statement;
+        } catch (SQLException ex) {
+            Logger.getLogger(MySQLOperations.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

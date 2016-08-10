@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -41,6 +43,10 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
      * Creates new form TableConfigurationFrame
      */
     private String selectedTable = "";
+    Long val = 1L;
+    Long min = Long.MIN_VALUE;
+    Long max = Long.MAX_VALUE;
+    Long step = 1L;
 
     public TableConfigurationFrame() {
         initComponents();
@@ -81,11 +87,14 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         configuredColumnsCombo = new javax.swing.JComboBox();
         configureButton = new javax.swing.JButton();
+        generateDataButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        numberOfRowsToGenerateSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(val, min, max, step));
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         tableSelected.setEditable(false);
-        tableSelected.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        tableSelected.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         jLabel2.setText("Configure column:");
 
@@ -96,31 +105,56 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
             }
         });
 
+        generateDataButton.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
+        generateDataButton.setText("Generate data");
+        generateDataButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateDataButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Number of rows to generate:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tableSelected, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(configuredColumnsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(configureButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(configuredColumnsCombo, 0, 342, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(configureButton))
+                    .addComponent(tableSelected)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(numberOfRowsToGenerateSpinner))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(generateDataButton, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(tableSelected, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tableSelected, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(configuredColumnsCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(configureButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(numberOfRowsToGenerateSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(generateDataButton)
+                .addContainerGap())
         );
 
         pack();
@@ -138,6 +172,17 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
             numberConfigurationForm.setVisible(true);
         }
     }//GEN-LAST:event_configureButtonActionPerformed
+
+    private void generateDataButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateDataButtonActionPerformed
+        Long numberOfRowsToGenerate = (Long)numberOfRowsToGenerateSpinner.getValue();
+        if(numberOfRowsToGenerate <= 0) {
+            JOptionPane.showMessageDialog(this, "Number of rows to generate must be greater than 0.");
+            return;
+        }
+        GenerateDataProgress generateDataProgress = new GenerateDataProgress(numberOfRowsToGenerate);
+        generateDataProgress.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_generateDataButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,7 +222,10 @@ public class TableConfigurationFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton configureButton;
     private javax.swing.JComboBox configuredColumnsCombo;
+    private javax.swing.JButton generateDataButton;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JSpinner numberOfRowsToGenerateSpinner;
     private javax.swing.JTextField tableSelected;
     // End of variables declaration//GEN-END:variables
 }

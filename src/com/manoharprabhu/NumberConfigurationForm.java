@@ -24,6 +24,7 @@
 package com.manoharprabhu;
 
 import com.manoharprabhu.services.DataStore;
+import java.awt.Component;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SpinnerNumberModel;
@@ -58,8 +59,10 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         if (columnMap.get("isRandomNumber") != null) {
             if ("0".equals(columnMap.get("isRandomNumber"))) {
                 isRandomCheckbox.setSelected(false);
+                startingValueSpinner.setEnabled(true);
             } else {
                 isRandomCheckbox.setSelected(true);
+                startingValueSpinner.setEnabled(false);
             }
         } else {
             isRandomCheckbox.setSelected(false);
@@ -93,6 +96,7 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jToggleButton1 = new javax.swing.JToggleButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
         isRandomCheckbox = new javax.swing.JCheckBox();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -102,8 +106,11 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         startingValueSpinner = new javax.swing.JSpinner(new SpinnerNumberModel(val, min, max, step));
         saveButton = new javax.swing.JButton();
+        noValueCheckbox = new javax.swing.JCheckBox();
 
         jToggleButton1.setText("jToggleButton1");
+
+        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -134,7 +141,7 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
                         .addComponent(minimumValueSpinner))
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 132, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(maximumValueSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -161,22 +168,31 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
             }
         });
 
+        noValueCheckbox.setText("No value (NULL)");
+        noValueCheckbox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                noValueCheckboxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(noValueCheckbox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
+                        .addComponent(isRandomCheckbox))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(startingValueSpinner))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(isRandomCheckbox)
-                            .addComponent(saveButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(saveButton)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -184,7 +200,9 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(isRandomCheckbox)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(isRandomCheckbox)
+                    .addComponent(noValueCheckbox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -210,6 +228,7 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
         columnMap.put("minimumValue", String.valueOf(minimumValueSpinner.getValue()));
         columnMap.put("maximumValue", String.valueOf(maximumValueSpinner.getValue()));
         columnMap.put("startingValue", String.valueOf(startingValueSpinner.getValue()));
+        columnMap.put("noValue", (noValueCheckbox.isSelected() == true) ? "1" : "0");
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_saveButtonActionPerformed
@@ -221,6 +240,21 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
             startingValueSpinner.setEnabled(true);
         }
     }//GEN-LAST:event_isRandomCheckboxActionPerformed
+
+    private void setAllComponentState(boolean state) {
+        isRandomCheckbox.setEnabled(state);
+        minimumValueSpinner.setEnabled(state);
+        maximumValueSpinner.setEnabled(state);
+        startingValueSpinner.setEnabled(state);
+    }
+    private void noValueCheckboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noValueCheckboxActionPerformed
+        if (noValueCheckbox.isSelected()) {
+            setAllComponentState(false);
+        } else {
+            setAllComponentState(true);
+            isRandomCheckboxActionPerformed(evt);
+        }
+    }//GEN-LAST:event_noValueCheckboxActionPerformed
 
     public String performValidation() {
         Long minimumValue = (Long) minimumValueSpinner.getValue();
@@ -275,6 +309,7 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox isRandomCheckbox;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -282,6 +317,7 @@ public class NumberConfigurationForm extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JSpinner maximumValueSpinner;
     private javax.swing.JSpinner minimumValueSpinner;
+    private javax.swing.JCheckBox noValueCheckbox;
     private javax.swing.JButton saveButton;
     private javax.swing.JSpinner startingValueSpinner;
     // End of variables declaration//GEN-END:variables
